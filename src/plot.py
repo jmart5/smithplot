@@ -6,6 +6,9 @@ s_dummy = np.linspace(-1, 1, 100) + 1j * np.linspace(-1, 1, 100)
 
 rf.plotting.plot_smith(s_dummy)
 
+for line in plt.gca().get_lines():
+    line.set_visible(False)
+
 def on_click(event):
     if event.inaxes is not None:
         x, y = event.xdata, event.ydata
