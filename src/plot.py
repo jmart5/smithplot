@@ -3,16 +3,13 @@ import numpy as np
 import skrf as rf
 import csv
 
-# Create dummy data for the Smith chart
-s_dummy = np.linspace(-1, 1, 100) + 1j * np.linspace(-1, 1, 100)
+
 
 # Plot the Smith chart
 fig, ax = plt.subplots()  # Create a figure and axes
-rf.plotting.plot_smith(s_dummy, ax=ax)  # Specify the axes for the plot
+s_line = 0j * np.linspace(-1, 1, 1) # Dummy line
+rf.plotting.plot_smith(s_line, ax=ax)  # Specify the axes for the plot
 
-# Hide all lines in the Smith chart
-for line in ax.get_lines():
-    line.set_visible(False)
 
 # Create a list to store the clicked points
 clicked_points = []
@@ -33,6 +30,16 @@ def on_click(event):
 
         print(f'Clicked at: x={x}, y={y}, Impedance={z}')
         print(f'Reflection Coefficient (|Γ|): {gamma:.4f}, VSWR: {vswr:.4f}')
+
+
+        # Calculate phase
+        phase_rad = np.arctan2(y, x)  # Phase in radians
+        phase_deg = np.degrees(phase_rad)  # Phase in degrees
+
+        # Print out the values
+        print(f'Reflection Coefficient (|Γ|): {gamma:.4f}')
+        print(f'VSWR: {vswr:.4f}')
+        print(f'Phase: {phase_rad:.4f} radians, {phase_deg:.2f} degrees')
 
         # Store the clicked point
         clicked_points.append((x, y))  # Append the (x, y) tuple to the list
@@ -76,3 +83,5 @@ fig.canvas.mpl_connect('button_press_event', on_click)
 
 # Show the plot
 plt.show()
+
+
