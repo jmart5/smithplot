@@ -74,7 +74,7 @@ save_ax = plt.axes([0.81, 0.05, 0.1, 0.075])
 save_button = Button(save_ax, 'Save Points')
 save_button.on_clicked(lambda event: save_to_csv())
 
-refresh_ax = plt.axes([0.69, 0.05, 0.1, 0.075])
+refresh_ax = plt.axes([0.65, 0.05, 0.1, 0.075])
 refresh_button = Button(refresh_ax, 'Refresh')
 refresh_button.on_clicked(clear_points)
 
