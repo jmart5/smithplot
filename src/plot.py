@@ -2,20 +2,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import skrf as rf
 import csv
-
-
+from matplotlib.widgets import Button
 
 # Plot the Smith chart
 fig, ax = plt.subplots()  # Create a figure and axes
-s_line = 0j * np.linspace(-1, 1, 1) # Dummy line
+s_line = 0j * np.linspace(-1, 1, 1)  # Dummy line
 rf.plotting.plot_smith(s_line, ax=ax)  # Specify the axes for the plot
 
-
-# Create a list to store the clicked points
 clicked_points = []
 
 def on_click(event):
-    # Check if the click was within the axes
     if event.inaxes is not None:
         x, y = event.xdata, event.ydata
         z = complex(x, y)  # Convert x, y to complex (reflection coefficient)
@@ -31,29 +27,23 @@ def on_click(event):
         print(f'Clicked at: x={x}, y={y}, Impedance={z}')
         print(f'Reflection Coefficient (|Γ|): {gamma:.4f}, VSWR: {vswr:.4f}')
 
-
         # Calculate phase
         phase_rad = np.arctan2(y, x)  # Phase in radians
         phase_deg = np.degrees(phase_rad)  # Phase in degrees
 
-        # Print out the values
         print(f'Reflection Coefficient (|Γ|): {gamma:.4f}')
         print(f'VSWR: {vswr:.4f}')
         print(f'Phase: {phase_rad:.4f} radians, {phase_deg:.2f} degrees')
 
-        # Store the clicked point
-        clicked_points.append((x, y))  # Append the (x, y) tuple to the list
+        clicked_points.append((x, y))
         
-        # Plot the clicked point on the chart
-        ax.plot(x, y, 'ro')  # 'ro' means red color, circle marker
+        ax.plot(x, y, 'ro')
         
-        # Optionally, update the figure
         plt.draw()
 
-        # Print the collected points
         print('x, real part of the reflection coefficient (Γ)')
         print('y, imaginary part of the reflection coefficient (Γ)')
-        print(f'Collected Points: {clicked_points}')  # Print all collected points
+        print(f'Collected Points: {clicked_points}')
     else:
         print('Clicked outside axes bounds')
 
@@ -69,19 +59,23 @@ def save_to_csv():
     
     print(f'Saved {len(clicked_points)} points to clicked_points.csv')
 
-# Create a button to save the points
-from matplotlib.widgets import Button
+def clear_points(event):
+    """Clear the plotted points and reset the clicked_points list."""
+    global clicked_points
+    clicked_points.clear()
+    ax.clear()
+    rf.plotting.plot_smith(s_line, ax=ax)
+    plt.draw()
+    print("Cleared all points.")
 
-save_ax = plt.axes([0.81, 0.05, 0.1, 0.075])  # Button position
+save_ax = plt.axes([0.81, 0.05, 0.1, 0.075]) 
 save_button = Button(save_ax, 'Save Points')
-
-# Connect the button to the save_to_csv function
 save_button.on_clicked(lambda event: save_to_csv())
 
-# Connect the click event to the on_click function
+refresh_ax = plt.axes([0.69, 0.05, 0.1, 0.075])
+refresh_button = Button(refresh_ax, 'Refresh')
+refresh_button.on_clicked(clear_points)
+
 fig.canvas.mpl_connect('button_press_event', on_click)
 
-# Show the plot
 plt.show()
-
-
