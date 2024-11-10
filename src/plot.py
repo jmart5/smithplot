@@ -6,7 +6,7 @@ from matplotlib.widgets import Button
 
 # Plot the Smith chart
 fig, ax = plt.subplots()  # Create a figure and axes
-fig.canvas.set_window_title("Smith Chart")
+fig.suptitle("Smith Chart")
 s_line = 0j * np.linspace(-1, 1, 1)  # Dummy line
 rf.plotting.plot_smith(s_line, ax=ax)  # Specify the axes for the plot
 ax.set_title("")
