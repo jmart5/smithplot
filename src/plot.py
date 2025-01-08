@@ -3,6 +3,8 @@ import numpy as np
 import skrf as rf
 import csv
 from matplotlib.widgets import Button
+import matplotlib
+matplotlib.use('TkAgg')
 
 # Plot the Smith chart
 fig, ax = plt.subplots()  # Create a figure and axes
@@ -13,13 +15,14 @@ ax.set_title("")
 
 clicked_points = []
 
+
 def on_click(event):
     if event.inaxes is not None:
         x, y = event.xdata, event.ydata
         z = complex(x, y)  # Convert x, y to complex (reflection coefficient)
-        
+
         gamma = abs(z)
-        
+
         # Calculate VSWR
         if gamma < 1:
             vswr = (1 + gamma) / (1 - gamma)
@@ -38,9 +41,9 @@ def on_click(event):
         print(f'Phase: {phase_rad:.4f} radians, {phase_deg:.2f} degrees')
 
         clicked_points.append((x, y))
-        
+
         ax.plot(x, y, 'ro')
-        
+
         plt.draw()
 
         print('x, real part of the reflection coefficient (Γ)')
@@ -48,6 +51,7 @@ def on_click(event):
         print(f'Collected Points: {clicked_points}')
     else:
         print('Clicked outside axes bounds')
+
 
 def save_to_csv():
     """Save the collected points to a CSV file."""
@@ -58,8 +62,9 @@ def save_to_csv():
     #     csv_writer.writerow(['Real Part (Γ)', 'Imaginary Part (Γ)'])
     #     # Write the points
     #     csv_writer.writerows(clicked_points)
-    
+
     print(f'Saved {len(clicked_points)} points to clicked_points.csv')
+
 
 def clear_points(event):
     """Clear the plotted points and reset the clicked_points list."""
@@ -70,7 +75,8 @@ def clear_points(event):
     plt.draw()
     print("Cleared all points.")
 
-save_ax = plt.axes([0.81, 0.05, 0.1, 0.075]) 
+
+save_ax = plt.axes([0.81, 0.05, 0.1, 0.075])
 save_button = Button(save_ax, 'Save Points')
 save_button.on_clicked(lambda event: save_to_csv())
 
