@@ -48,8 +48,8 @@ def on_click(event):
 
         plt.draw()
 
-        print('x, real part of the reflection coefficient (Γ)')
-        print('y, imaginary part of the reflection coefficient (Γ)')
+        print('x, real part of the reflection coefficient')
+        print('y, imaginary part of the reflection coefficient')
         print(f'Collected Points: {clicked_points}')
     else:
         print('Clicked outside the main plot or on a UI element')
@@ -73,7 +73,7 @@ def save_to_csv():
         try:
             with open(file_path, 'w', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile)
-                csv_writer.writerow(['Real Part (Γ)', 'Imaginary Part (Γ)'])
+                csv_writer.writerow(['Real Part', 'Imaginary Part'])
                 csv_writer.writerows(clicked_points)
             messagebox.showinfo("Success", f"Saved {len(clicked_points)} points to {file_path}")
         except Exception as e:
